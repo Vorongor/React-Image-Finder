@@ -22,5 +22,7 @@ const Searchbar = ({ callback }) => {
     </header>
   );
 };
-
+Searchbar.propTypes = {
+  callback: PropTypes.func.isRequired,
+};
 export default Searchbar;
