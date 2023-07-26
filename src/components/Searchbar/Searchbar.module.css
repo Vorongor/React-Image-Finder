@@ -1,0 +1,29 @@
+.searchbar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 72px;
+  background-color: #00bcd4;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+.form {
+    display: flex;
+    width: 480px;
+    height: 56px;
+    flex-direction: row;
+}
+.button {
+    width: 25%;
+}
+.buttonLabel {
+    font-size: 20px;
+}
+.input {
+    width: 75%;
+}
