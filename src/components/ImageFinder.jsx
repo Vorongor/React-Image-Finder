@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import Searchbar from './Searchbar/Searchbar';
+import { searchImages } from './Fetch/Fetch.jsx'
 
 class ImageFinder extends Component {
   state = {
