@@ -46,8 +46,8 @@ const Searchbar = ({ onSubmit }) => {
     </header>
   );
 };
-// Searchbar.propTypes = {
-//   callback: PropTypes.func.isRequired,
-// };
+Searchbar.propTypes = {
+  callback: PropTypes.func.isRequired,
+};
 
 export default Searchbar;
