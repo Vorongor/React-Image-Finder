@@ -1,5 +1,5 @@
 .searchbar {
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;
@@ -26,4 +26,9 @@
 }
 .input {
     width: 75%;
+    padding: 8px;
+    font-size: 20px;
+}
+.searchIcon {
+    width: 36px;
 }
