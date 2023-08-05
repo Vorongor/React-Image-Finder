@@ -6,29 +6,22 @@ import Modal from './Modal/Modal';
 import MyLoader from './Loader/Loader';
 
 export class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      query: '',
-      images: [],
-      page: 1,
-      loading: false,
-      selectedImage: null,
-      showModal: false,
-    };
-    this.API_KEY = '37257084-385968b29bb2898cd9ae06014';
-    this.galleryRef = React.createRef();
-  }
+  state = {
+    query: null,
+    images: [],
+    page: 1,
+    loading: false,
+    selectedImage: null,
+    showModal: false,
+  };
+  API_KEY = '37257084-385968b29bb2898cd9ae06014';
+  galleryRef = React.createRef();
 
-  componentDidMount() {
-    // Set the click listener once the component is mounted
-    this.galleryRef.current.addEventListener('click', this.handleImageClick);
-  }
-  componentDidUpdate() {}
-  componentWillUnmount() {
-    // Remove the click listener when the component is unmounted
-    this.galleryRef.current.removeEventListener('click', this.handleImageClick);
-  }
+  // componentDidUpdate() {
+  //   if (this.state.query !== null) {
+  //     this.fetchImages ()
+  //   }
+  // }
 
   fetchImages = () => {
     const { query, page } = this.state;
@@ -74,6 +67,7 @@ export class App extends Component {
   };
 
   handleImageClick = e => {
+    console.log(e.target)
     const link = e.target.dataset.largeImageUrl;
     if (link) {
       this.setState({
@@ -91,16 +85,18 @@ export class App extends Component {
   };
 
   render() {
-    const { images, loading, selectedImage, showModal } = this.state;
+    const { images, loading, selectedImage, showModal, query } = this.state;
 
     return (
       <div>
         <Searchbar onSubmit={this.handleSearchSubmit} />
-        <ImageGallery
-          ref={this.galleryRef}
-          images={images}
-          onImageClick={this.handleImageClick}
-        />
+        {query && (
+          <ImageGallery
+            ref={this.galleryRef}
+            images={images}
+            onImageClick={this.handleImageClick}
+          />
+        )}
         {loading && <MyLoader />}
         {images.length > 0 && !loading && (
           <Button onClick={this.handleLoadMore} show={true} />
