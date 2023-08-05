@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import style from './Item.module.css';
 
 const ImageGalleryItem = ({ image, onImageClick }) => {
+  const handleImageClick = () => {
+    onImageClick(image.largeImageURL); 
+  };
+
   return (
-    <li className={style.item}>
-      <img
-        className={style.image}
-        src={image.webformatURL}
-        alt={image.tags}
-        onClick={image.largeImageURL}
-      />
-    </li>
+    <img
+      src={image.webformatURL}
+      alt={image.tags}
+      className={style.image}
+      onClick={handleImageClick}
+    />
   );
 };
 

@@ -66,9 +66,7 @@ export class App extends Component {
     );
   };
 
-  handleImageClick = e => {
-    console.log(e.target)
-    const link = e.target.dataset.largeImageUrl;
+  handleImageClick = link => {
     if (link) {
       this.setState({
         selectedImage: link,
