@@ -19,7 +19,7 @@ export const App = () => {
     if (query !== null) {
       fetchImages();
     }
-  }, [query]);
+  }, [query, fetchImages]);
 
   const fetchImages = () => {
     if (!query) return;
