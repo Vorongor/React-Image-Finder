@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
@@ -15,13 +15,7 @@ export const App = () => {
   const API_KEY = '37257084-385968b29bb2898cd9ae06014';
   const galleryRef = useRef();
 
-  useEffect(() => {
-    if (query !== null) {
-      fetchImages();
-    }
-  }, [query, fetchImages]);
-
-  const fetchImages = () => {
+  const fetchImages = useCallback(() => {
     if (!query) return;
 
     setLoading(true);
@@ -38,7 +32,13 @@ export const App = () => {
         console.error('Error fetching images:', error);
         setLoading(false);
       });
-  };
+  }, [API_KEY, page, query]);
+
+  useEffect(() => {
+    if (query !== null) {
+      fetchImages();
+    }
+  }, [query, fetchImages]);
 
   const handleSearchSubmit = value => {
     setQuery(value);
@@ -78,4 +78,3 @@ export const App = () => {
     </div>
   );
 };
-
