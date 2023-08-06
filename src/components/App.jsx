@@ -1,108 +1,81 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
 import MyLoader from './Loader/Loader';
 
-export class App extends Component {
-  state = {
-    query: null,
-    images: [],
-    page: 1,
-    loading: false,
-    selectedImage: null,
-    showModal: false,
-  };
-  API_KEY = '37257084-385968b29bb2898cd9ae06014';
-  galleryRef = React.createRef();
+export const App = () => {
+  const [query, setQuery] = useState(null);
+  const [images, setImages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const API_KEY = '37257084-385968b29bb2898cd9ae06014';
+  const galleryRef = useRef();
 
-  // componentDidUpdate() {
-  //   if (this.state.query !== null) {
-  //     this.fetchImages ()
-  //   }
-  // }
+  useEffect(() => {
+    if (query !== null) {
+      fetchImages();
+    }
+  }, [query]);
 
-  fetchImages = () => {
-    const { query, page } = this.state;
-
+  const fetchImages = () => {
     if (!query) return;
 
-    this.setState({ loading: true });
+    setLoading(true);
 
     fetch(
-      `https://pixabay.com/api/?q=${query}&page=${page}&key=${this.API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+      `https://pixabay.com/api/?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
     )
       .then(response => response.json())
       .then(data => {
-        this.setState(prevState => ({
-          images: [...prevState.images, ...data.hits],
-          loading: false,
-        }));
+        setImages(prevImages => [...prevImages, ...data.hits]);
+        setLoading(false);
       })
       .catch(error => {
         console.error('Error fetching images:', error);
-        this.setState({ loading: false });
+        setLoading(false);
       });
   };
 
-  handleSearchSubmit = value => {
-    this.setState(
-      {
-        query: value,
-        page: 1,
-        images: [],
-      },
-      this.fetchImages
-    );
+  const handleSearchSubmit = value => {
+    setQuery(value);
+    setPage(1);
+    setImages([]);
   };
 
-  handleLoadMore = () => {
-    this.setState(
-      prevState => ({
-        page: prevState.page + 1,
-      }),
-      this.fetchImages
-    );
+  const handleLoadMore = () => {
+    setPage(prevPage => prevPage + 1);
   };
 
-  handleImageClick = link => {
+  const handleImageClick = link => {
     if (link) {
-      this.setState({
-        selectedImage: link,
-        showModal: true,
-      });
+      setSelectedImage(link);
+      setShowModal(true);
     }
   };
 
-  handleCloseModal = () => {
-    this.setState({
-      selectedImage: null,
-      showModal: false,
-    });
+  const handleCloseModal = () => {
+    setSelectedImage(null);
+    setShowModal(false);
   };
 
-  render() {
-    const { images, loading, selectedImage, showModal, query } = this.state;
+  return (
+    <div>
+      <Searchbar onSubmit={handleSearchSubmit} />
+      {query && (
+        <ImageGallery
+          ref={galleryRef}
+          images={images}
+          onImageClick={handleImageClick}
+        />
+      )}
+      {loading && <MyLoader />}
+      {images.length > 0 && !loading && <Button onClick={handleLoadMore} show={true} />}
+      {showModal && <Modal image={selectedImage} onClose={handleCloseModal} />}
+    </div>
+  );
+};
 
-    return (
-      <div>
-        <Searchbar onSubmit={this.handleSearchSubmit} />
-        {query && (
-          <ImageGallery
-            ref={this.galleryRef}
-            images={images}
-            onImageClick={this.handleImageClick}
-          />
-        )}
-        {loading && <MyLoader />}
-        {images.length > 0 && !loading && (
-          <Button onClick={this.handleLoadMore} show={true} />
-        )}
-        {showModal && (
-          <Modal image={selectedImage} onClose={this.handleCloseModal} />
-        )}
-      </div>
-    );
-  }
-}
